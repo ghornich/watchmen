@@ -6,6 +6,7 @@ var pathlib=require('path')
 // add ignore regex capability
 // multiple paths (glob?)
 // convert to class
+// optionally run command when starting watch
 
 // TODO ignore same consecutive changes for file, with customizable throttle time
 
@@ -23,7 +24,7 @@ module.exports=function watchmen(paths, cmd){
     console.log('paths: called for path(s) "' + paths.join(', ') + '", command: "'+cmd+'"')
 
     var onChange = function(path, eventType, filename){
-        console.log('onChange called: ', path, eventType, filename)
+        // console.log('onChange called: ', path, eventType, filename)
 
         var prevent=false
 
@@ -34,23 +35,29 @@ module.exports=function watchmen(paths, cmd){
         prevChangePath=path
         prevChangeTime=Date.now()
         if(prevent){
-            console.log('same event detected for path "'+path+'" within timeout, returning')
+            // console.log('same event detected for path "'+path+'" within timeout, returning')
             return
         }
 
         if (running) {
-            console.log('command is running, returning')
+            // console.log('command is running, returning')
             return
         }
 
         running = true
 
-        console.log('not running: executing command')
+        console.log('---------')
+        console.log('---------')
+        console.log('[Watchmen] executing command')
 
         exec(cmd, function(err,sout,serr){
-            if (err||sout||serr) console.log(err||'',sout||'',serr||'')
-
-            console.log('command finished')
+            if (err){
+                console.log(err)
+                console.log(`[Watchmen] [${getReadableDate()}] ERROR`)
+            }
+            else {
+                console.log(`[Watchmen] [${getReadableDate()}] SUCCESS`)
+            }
 
             running = false
         })
@@ -64,6 +71,9 @@ module.exports=function watchmen(paths, cmd){
 
 }
 
+function getReadableDate(){
+    return (new Date()).toLocaleString()
+}
 
 // function debounce(func, wait, immediate) {
 //     var timeout;
