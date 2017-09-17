@@ -70,7 +70,7 @@ class Watchmen {
             return
         }
 
-        cnf.running=true
+        cnf._running=true
 
         console.log(`[Watchmen] [${date()}] executing command ${cnf.name}`)
         
@@ -83,7 +83,7 @@ class Watchmen {
                 console.log(`[Watchmen] [${date()}] SUCCESS (command: ${cnf.name})`)
             }
 
-            cnf.running = false
+            cnf._running = false
         })
     }
 
