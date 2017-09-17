@@ -15,8 +15,9 @@
 
 // watchmen(paths, cmd)
 
+const pathlib=require('path')
 const Watchmen=require('./watchmen')
-const conf = require('./watchmen.conf.js')
+const conf = require(pathlib.resolve(process.cwd(), 'watchmen.conf.js'))
 
 const w = new Watchmen(conf)
 w.start()
